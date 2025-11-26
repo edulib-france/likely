@@ -9,6 +9,19 @@ class VotesController < ApplicationController
     end
   end
 
+  def result
+    question_id = params[:id]
+    
+    top_selected_ids = Vote
+      .where(question_id: question_id)
+      .group(:selected_id)
+      .order('COUNT(selected_id) DESC')
+      .limit(3)
+      .pluck(:selected_id)
+
+    render json: User.where(id: top_selected_ids).select(:name)
+  end
+
   private
 
   def vote_params
