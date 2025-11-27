@@ -1,0 +1,11 @@
+fr:
+  activerecord:
+    errors:
+      models:
+        vote:
+          attributes:
+            question_id:
+              taken: "Vous avez déjà voté pour cette question"
+    attributes:
+      vote:
+        question_id: ""
