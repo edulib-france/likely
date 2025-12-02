@@ -41,14 +41,17 @@ class VotesController < ApplicationController
   def result
     question_id = params[:id]
     
-    top_selected_ids = Vote
+    votes_count = Vote
       .where(question_id: question_id)
       .group(:selected_id)
-      .order('COUNT(selected_id) DESC')
-      .limit(3)
-      .pluck(:selected_id)
+      .count
+    
+    result = votes_count.sort_by { |_, count| -count }.take(3).map do |user_id, count|
+      user = User.find(user_id)
+      { id: user.id, name: user.name, vote_count: count }
+    end
 
-    render json: User.where(id: top_selected_ids).select(:name)
+    render json: result
   end
 
   private
