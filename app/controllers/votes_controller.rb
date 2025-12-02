@@ -9,6 +9,18 @@ class VotesController < ApplicationController
     end
   end
 
+  def index
+    question_id = params[:question_id]
+    
+    if question_id.present?
+      total_votes = Vote.where(question_id: question_id).count
+      render json: { question_id: question_id.to_i, total_votes: total_votes }
+    else
+      votes = Vote.all
+      render json: votes
+    end
+  end
+
   def result
     question_id = params[:id]
     
