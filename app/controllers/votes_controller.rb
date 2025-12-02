@@ -11,13 +11,30 @@ class VotesController < ApplicationController
 
   def index
     question_id = params[:question_id]
-    
+
     if question_id.present?
       total_votes = Vote.where(question_id: question_id).count
       render json: { question_id: question_id.to_i, total_votes: total_votes }
     else
       votes = Vote.all
       render json: votes
+    end
+  end
+
+  def show
+    question_id = params[:question_id]
+    voter_id = params[:voter_id]
+    
+    vote = Vote.find_by(question_id: question_id, voter_id: voter_id)
+    
+    if vote
+      selected_user = User.find(vote.selected_id)
+      render json: { 
+        has_voted: true, 
+        selected_user: { id: selected_user.id, name: selected_user.name }
+      }
+    else
+      render json: { has_voted: false }
     end
   end
 

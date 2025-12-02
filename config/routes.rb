@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   
   resources :users, only: [:index]
   resources :questions, only: [:index]
-  resources :votes, only: [:index, :create]
+  resources :votes, only: [:index, :create, :show]
   
   get 'questions/:id/result', to: 'votes#result'
 end
